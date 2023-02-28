@@ -1,9 +1,59 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title></title>
-</head>
 <body>
-<script>alert('foo')</script>
 </body>
+<script>
+let urlWithParams = document.URL;
+let usp = new URLSearchParams(urlWithParams);
+let objName = usp.get('objName');
+//let objName = 'objName_placeholder'
+let objId = usp.get('objId');
+//let objId = 'objId_placeholder'
+var jwt;
+function init() {
+    if (typeof window.addEventListener === 'function') {
+        window.addEventListener('message', receiveJWTToken, false);
+    } else if (typeof window.attachEvent == 'function') {
+        window.attachEvent('onmessage', receiveJWTToken);
+    } else {
+        throw new Error("Browser doesn't support addEventListener or attachEvent");
+    }
+    payload = { }
+    payload.origin = window.frames.origin;
+    payload.method = 'requestJwtToken';
+    window.parent.postMessage(JSON.stringify(payload), '*');
+}
+function receiveJWTToken(token) {
+    //sometimes token data contains '_adfShowBody'
+    if (token.data && token.data != '_adfShowBody') {
+        jwt = token.data;       
+        if(objId && objName){
+            let host = token.origin;
+            createLogRecord(host,jwt);
+        }
+        
+    }
+}
+function createLogRecord(host, token) {
+      fetch(`${host}/crmRestApi/resources/11.13.18.05/ES_JournalAcces_c`, {
+        method: 'post',
+        headers: [
+          ['Authorization', `Bearer ${token}`],
+          ['Content-Type', 'application/json']
+        ],
+        body: JSON.stringify({
+            ES_NomObjet_c: objName || 'undefined',
+            ES_IdentifiantObjet_c: objId,
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert('Debug: Success!');
+      })
+      .catch((error) => {
+          alert('Debug: Something went wrong!');
+        });
+}
+init();
+</script>
 </html>
