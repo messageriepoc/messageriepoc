@@ -6,29 +6,37 @@
 let urlWithParams = document.URL;
 let usp = new URLSearchParams(urlWithParams);
 let objName = usp.get('objName');
+console.log(`objName: ${objName}`);
 //let objName = 'objName_placeholder'
 let objId = usp.get('objId');
+console.log(`objId: ${objId}`);
 //let objId = 'objId_placeholder'
 var jwt;
 function init() {
     if (typeof window.addEventListener === 'function') {
+        console.log('addEventListener === function');
         window.addEventListener('message', receiveJWTToken, false);
     } else if (typeof window.attachEvent == 'function') {
+        console.log('attachEvent === function');
         window.attachEvent('onmessage', receiveJWTToken);
     } else {
+        console.log('Browser does not support addEventListener or attachEvent');
         throw new Error("Browser doesn't support addEventListener or attachEvent");
     }
     payload = { }
-    payload.origin = window.frames.origin;
+    //payload.origin = window.frames.origin;
+    payload.origin = 'https://fa-evwq-dev1-saasfaprod1.fa.ocs.oraclecloud.com'
     payload.method = 'requestJwtToken';
     window.parent.postMessage(JSON.stringify(payload), '*');
 }
 function receiveJWTToken(token) {
+    console.log(`receiveJWTToken, token: ${token}, data: ${token?.data}, tokenOrigin: ${token?.origin}`);
     //sometimes token data contains '_adfShowBody'
     if (token.data && token.data != '_adfShowBody') {
         jwt = token.data;       
         if(objId && objName){
-            let host = token.origin;
+            //let host = token.origin;
+            let host = 'https://fa-evwq-dev1-saasfaprod1.fa.ocs.oraclecloud.com';
             createLogRecord(host,jwt);
         }
         
