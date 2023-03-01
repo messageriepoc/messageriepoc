@@ -24,8 +24,8 @@ function init() {
         throw new Error("Browser doesn't support addEventListener or attachEvent");
     }
     payload = { }
-    //payload.origin = window.frames.origin;
-    payload.origin = 'https://fa-evwq-dev1-saasfaprod1.fa.ocs.oraclecloud.com'
+    payload.origin = window.frames.origin;
+    //payload.origin = 'https://fa-evwq-dev1-saasfaprod1.fa.ocs.oraclecloud.com'
     payload.method = 'requestJwtToken';
     window.parent.postMessage(JSON.stringify(payload), '*');
 }
