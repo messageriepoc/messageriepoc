@@ -5,7 +5,7 @@
 <script>
 let urlWithParams = document.URL;
 let usp = new URLSearchParams(urlWithParams);
-let objName = usp.get('objName');
+let objName = usp.get('objName') || 'not_found';
 console.log(`objName: ${objName}`);
 //let objName = 'objName_placeholder'
 let objId = usp.get('objId');
@@ -33,13 +33,16 @@ function receiveJWTToken(token) {
     console.log(`receiveJWTToken, token: ${token}, data: ${token?.data}, tokenOrigin: ${token?.origin}`);
     //sometimes token data contains '_adfShowBody'
     if (token.data && token.data != '_adfShowBody') {
-        jwt = token.data;       
+        jwt = token.data;
+        console.log(`jwt: ${jwt}`);
         if(objId && objName){
             //let host = token.origin;
             let host = 'https://fa-evwq-dev1-saasfaprod1.fa.ocs.oraclecloud.com';
             createLogRecord(host,jwt);
-        }
-        
+        }        
+    }
+    else{
+        console.log(`token.data: ${token.data}`);
     }
 }
 function createLogRecord(host, token) {
