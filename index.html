@@ -36,8 +36,8 @@ function receiveJWTToken(token) {
         jwt = token.data;
         console.log(`jwt: ${jwt}`);
         if(objId && objName){
-            //let host = token.origin;
-            let host = 'https://fa-evwq-dev1-saasfaprod1.fa.ocs.oraclecloud.com';
+            let host = token.origin;
+            //let host = 'https://fa-evwq-dev1-saasfaprod1.fa.ocs.oraclecloud.com';
             createLogRecord(host,jwt);
         }        
     }
