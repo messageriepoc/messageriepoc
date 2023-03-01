@@ -59,10 +59,12 @@ function createLogRecord(host, token) {
       })
       .then(response => response.json())
       .then(data => {
-        alert('Debug: Success!');
+        //alert('Debug: Success!');
+          console.log('Debug: Success!');
       })
       .catch((error) => {
-          alert('Debug: Something went wrong!');
+          //alert('Debug: Something went wrong!');
+          console.log('Debug: Something went wrong!');
         });
 }
 init();
